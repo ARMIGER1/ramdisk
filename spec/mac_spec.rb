@@ -61,7 +61,7 @@ RSpec.describe Ramdisk::Mac do
 
       puts `diskutil list`
 
-      `hdiutil detach #{@ramdisk.location}`
+      @ramdisk.destroy
     end
   end
 end

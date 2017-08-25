@@ -22,6 +22,10 @@ module Ramdisk
       mount
     end
 
+    def destroy
+      `hdiutil detach #{@location}`
+    end
+
     private
 
     def init_disk
