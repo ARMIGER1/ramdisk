@@ -9,7 +9,7 @@ RSpec.describe Ramdisk::Mac do
   it "has a default name" do
     ramdisk = Ramdisk::Mac.new
 
-    expect(ramdisk.disk_name).to eq("Untitled")
+    expect(ramdisk.disk_name).to eq("RAMDISK")
   end
 
   it "allows the disk name to be set on initialize" do
@@ -39,7 +39,7 @@ RSpec.describe Ramdisk::Mac do
   end
 
   describe '#create' do
-    mount_point = 'mount_point'
+    mount_point = '/Volumes/RAMDISK'
 
     before(:all) do
       FileUtils.mkdir(mount_point) unless File.exist?(mount_point)
@@ -58,6 +58,8 @@ RSpec.describe Ramdisk::Mac do
 
       expect(@ramdisk.location).not_to be_nil
       expect(@ramdisk.location).not_to eq('')
+
+      puts `diskutil list`
 
       `hdiutil detach #{@ramdisk.location}`
     end
