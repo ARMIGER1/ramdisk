@@ -10,4 +10,11 @@ RSpec.describe Ramdisk::Mac do
 
     expect(ramdisk.disk_name).to eq("Untitled")
   end
+
+  it "allows the disk name to be set on initialize" do
+    disk_name = "Example disk"
+    ramdisk = Ramdisk::Mac.new(disk_name: disk_name)
+
+    expect(ramdisk.disk_name).to eq(disk_name)
+  end
 end
