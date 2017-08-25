@@ -1,4 +1,5 @@
 require "spec_helper"
+require "fileutils"
 
 RSpec.describe Ramdisk::Mac do
   it "has a default sector size" do
@@ -34,6 +35,31 @@ RSpec.describe Ramdisk::Mac do
 
         expect(ramdisk.disk_size).to eq(byte_value)
       end
+    end
+  end
+
+  describe '#create' do
+    mount_point = 'mount_point'
+
+    before(:all) do
+      FileUtils.mkdir(mount_point) unless File.exist?(mount_point)
+    end
+
+    after(:all) do
+      FileUtils.rm_rf(mount_point)
+    end
+
+    before(:each) do
+      @ramdisk = Ramdisk::Mac.new(disk_size_in_gb: 2)
+    end
+
+    it 'creates a ramdisk in /dev' do
+      @ramdisk.create
+
+      expect(@ramdisk.location).not_to be_nil
+      expect(@ramdisk.location).not_to eq('')
+
+      `hdiutil detach #{@ramdisk.location}`
     end
   end
 end

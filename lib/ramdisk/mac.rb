@@ -1,6 +1,6 @@
 module Ramdisk
   class Mac
-    attr_accessor :disk_name, :disk_size
+    attr_accessor :disk_name, :disk_size, :location
 
     def initialize(disk_name: "Untitled", disk_size_in_gb: 2)
       @disk_name = disk_name
@@ -9,6 +9,13 @@ module Ramdisk
 
     def self.sector_size
       Ramdisk.sector_size
+    end
+
+    def create
+      regex = /(\t|\ )/
+      command = "hdiutil attach -nomount ram://#{@disk_size}"
+
+      @location = `#{command}`.gsub(regex, '').chomp
     end
 
     private
