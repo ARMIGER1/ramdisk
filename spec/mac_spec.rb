@@ -25,5 +25,15 @@ RSpec.describe Ramdisk::Mac do
       # Defaults to 2GB
       expect(ramdisk.disk_size).to eq(4194304)
     end
+
+    [[0.5, 1048576], [1, 2097152],[1.5, 3145728]].each do |size|
+      it "calculates the size of a #{size[0]}GB disk in bytes" do
+        gb_value = size[0]
+        byte_value = size[1]
+        ramdisk = Ramdisk::Mac.new(disk_size_in_gb: gb_value)
+
+        expect(ramdisk.disk_size).to eq(byte_value)
+      end
+    end
   end
 end
