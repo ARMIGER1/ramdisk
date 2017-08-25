@@ -22,7 +22,8 @@ RSpec.describe Ramdisk::Mac do
     it "calculates the size of the new disk in bytes" do
       ramdisk = Ramdisk::Mac.new
 
-      expect(ramdisk.calculate_size(2)).to eq(4194304)
+      # Defaults to 2GB
+      expect(ramdisk.disk_size).to eq(4194304)
     end
   end
 end
