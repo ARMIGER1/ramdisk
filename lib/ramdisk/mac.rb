@@ -35,8 +35,16 @@ module Ramdisk
       path = path.take(path.index(ramdisk_name)+1).join(File::SEPARATOR)
 
       @disk_name = ramdisk_name
-      @location = path
+      @mount_point = path
       @disk_size = calculate_size(0.5)
+    end
+
+    def for_xcode
+      derived_data_directory = File.expand_path('~/Library/Developer/Xcode/DerivedData')
+
+      @disk_name = 'DerivedData'
+      @mount_point = derived_data_directory
+      @disk_size = calculate_size(1)
     end
 
     private

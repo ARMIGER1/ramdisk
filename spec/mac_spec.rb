@@ -74,9 +74,33 @@ RSpec.describe Ramdisk::Mac do
 
       expect(ios_ramdisk.disk_name).to match(regex)
       expect(ios_ramdisk.disk_name.length).to eq(36)
-      expect(ios_ramdisk.location).to match(regex)
-      expect(ios_ramdisk.location).not_to match(/data/)
+      expect(ios_ramdisk.mount_point).to match(regex)
+      expect(ios_ramdisk.mount_point).not_to match(/data/)
       expect(ios_ramdisk.disk_size).to eq(1048576)
+
+      ios_ramdisk.create
+
+      sleep(10)
+
+      ios_ramdisk.destroy
+    end
+  end
+
+  describe '#for_xcode' do
+    it "configures the ramdisk to be used with XCode" do
+      xcode_ramdisk = Ramdisk::Mac.new
+
+      xcode_ramdisk.for_xcode
+
+      expect(xcode_ramdisk.disk_name).to eq('DerivedData')
+      expect(xcode_ramdisk.mount_point).to eq(File.expand_path('~/Library/Developer/Xcode/DerivedData'))
+      expect(xcode_ramdisk.disk_size).to eq(2097152)
+
+      xcode_ramdisk.create
+
+      sleep(10)
+
+      xcode_ramdisk.destroy
     end
   end
 end
