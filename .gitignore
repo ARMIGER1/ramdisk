@@ -10,3 +10,10 @@
 
 # rspec failure tracking
 .rspec_status
+
+# OS X Finder info
+.DS_Store
+
+# Jetbrains config files
+# Covers all Jetbrains IDEs
+.idea
