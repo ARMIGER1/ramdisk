@@ -59,9 +59,24 @@ RSpec.describe Ramdisk::Mac do
       expect(@ramdisk.location).not_to be_nil
       expect(@ramdisk.location).not_to eq('')
 
-      puts `diskutil list`
+      # puts `diskutil list`
 
       @ramdisk.destroy
+    end
+  end
+
+  describe '#for_ios_simulator' do
+    it "configures the ramdisk to be used with the given XCode project's iOS Simulator device" do
+      ios_ramdisk = Ramdisk::Mac.new
+      regex = /[0-9A-F]{,8}-[0-9A-F]{,4}-[0-9A-F]{,4}-[0-9A-F]{,4}-[0-9A-F]{,12}\z/
+
+      ios_ramdisk.for_ios_simulator(app_name: 'RealmAndCharts-example')
+
+      expect(ios_ramdisk.disk_name).to match(regex)
+      expect(ios_ramdisk.disk_name.length).to eq(36)
+      expect(ios_ramdisk.location).to match(regex)
+      expect(ios_ramdisk.location).not_to match(/data/)
+      expect(ios_ramdisk.disk_size).to eq(1048576)
     end
   end
 end

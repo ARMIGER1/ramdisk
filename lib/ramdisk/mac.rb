@@ -26,6 +26,19 @@ module Ramdisk
       `hdiutil detach #{@location}`
     end
 
+    def for_ios_simulator(app_name: "App")
+      device_id_regex = /[0-9A-F]{,8}-[0-9A-F]{,4}-[0-9A-F]{,4}-[0-9A-F]{,4}-[0-9A-F]{,12}/
+      path = `find ~/Library/Developer/CoreSimulator -name #{app_name}`.chomp
+
+      ramdisk_name = path.scan(device_id_regex).first
+      path = path.split(File::SEPARATOR)
+      path = path.take(path.index(ramdisk_name)+1).join(File::SEPARATOR)
+
+      @disk_name = ramdisk_name
+      @location = path
+      @disk_size = calculate_size(0.5)
+    end
+
     private
 
     def init_disk
