@@ -1,0 +1,41 @@
+# --------------------------------------------------
+# Rules
+# --------------------------------------------------
+
+# all specs and spec_helper
+watch('^spec/(.*)\.rb') { |m| run_spec_from_spec(m) }
+
+# everything in lib
+watch('^lib/(.*)\.rb') { |m| run_spec_from_lib(m) }
+
+# --------------------------------------------------
+# Signal Handling
+# --------------------------------------------------
+
+Signal.trap('QUIT') { run_all_specs  } # Ctrl-\
+Signal.trap('INT' ) { abort("\n") } # Ctrl-C
+
+# --------------------------------------------------
+# Helpers
+# --------------------------------------------------
+
+def run_all_specs
+  system('rake spec')
+end
+
+def run_spec_from_lib(m)
+  spec_file = "spec/#{File.basename(m[1])}_spec.rb"
+
+  system("rake spec SPEC=#{spec_file}") if File.exist?(spec_file)
+end
+
+def run_spec_from_spec(m)
+  spec_file = "spec/#{m[1]}.rb"
+
+  if File.exist?(spec_file) && m[1] != 'spec_helper'
+    puts spec_file
+    system("rake spec SPEC=#{spec_file}")
+  elsif File.exist?(spec_file) && m[1] == 'spec_helper'
+    run_all_specs
+  end
+end
